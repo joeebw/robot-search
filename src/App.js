@@ -34,7 +34,7 @@ function App() {
 
   return (
     
-  newFilteredRobots.length <= 0 ? <Spinner/> : 
+  robots.length <= 0 ? <Spinner/> : 
   <div className="App">
     <h1>Robot Search</h1>
     <SearchField filteredRobot={filteredRobot}/>
