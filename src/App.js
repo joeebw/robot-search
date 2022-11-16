@@ -1,24 +1,46 @@
 import logo from './logo.svg';
+import SearchField from './components/searchfield/searchField';
+import CardList from './components/cardList/cardList';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Spinner from './components/spinner/spinner';
 import './App.css';
 
 function App() {
+
+  const [robots, setRobots] = useState([]);
+  const [newFilteredRobots, setNewFilteredRobots] = useState([]);
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/users').then(resp => {
+      setRobots(resp.data);
+    })
+    
+
+  }, [])
+
+  useEffect(() => {
+    setNewFilteredRobots(robots);
+  }, [robots]) 
+
+  const filteredRobot = (event) => {
+    const robotsFiltered = robots.filter((robot) => {
+      return robot.name.toLowerCase().includes(event.target.value.toLowerCase());
+    })
+    setNewFilteredRobots(robotsFiltered);
+
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+  newFilteredRobots.length <= 0 ? <Spinner/> : 
+  <div className="App">
+    <h1>Robot Search</h1>
+    <SearchField filteredRobot={filteredRobot}/>
+    <CardList robots={newFilteredRobots}/>
+  </div>  
+   
   );
 }
 
